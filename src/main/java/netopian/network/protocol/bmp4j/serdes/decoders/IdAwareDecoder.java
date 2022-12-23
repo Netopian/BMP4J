@@ -3,6 +3,7 @@ package netopian.network.protocol.bmp4j.serdes.decoders;
 import java.util.Objects;
 import java.util.function.Supplier;
 
+import netopian.network.protocol.bmp4j.model.BmpMessage;
 import netopian.network.protocol.bmp4j.serdes.concept.MultipleDecoder;
 
 import io.netty.channel.ChannelHandlerContext;

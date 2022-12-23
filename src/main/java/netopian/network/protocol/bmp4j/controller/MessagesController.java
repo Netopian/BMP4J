@@ -6,6 +6,9 @@ import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+import netopian.network.protocol.bmp4j.integration.Message;
+import netopian.network.protocol.bmp4j.integration.Messages;
+import netopian.network.protocol.bmp4j.integration.Statistic;
 import netopian.network.protocol.bmp4j.statistic.SerdesMetric;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -6,6 +6,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import javax.annotation.PostConstruct;
 
+import netopian.network.protocol.bmp4j.model.BmpMessage;
+import netopian.network.protocol.common.sealing.TypelessV3;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;

@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import netopian.network.protocol.bmp4j.model.BmpMessage;
 import netopian.network.protocol.bmp4j.serdes.concept.BgpPduDecoder;
 
 import io.netty.buffer.ByteBuf;

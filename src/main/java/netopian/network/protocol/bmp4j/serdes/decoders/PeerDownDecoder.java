@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.google.protobuf.ByteString;
 
+import netopian.network.protocol.bmp4j.model.BmpMessage;
 import netopian.network.protocol.bmp4j.utils.Sequential;
 import netopian.network.protocol.bmp4j.utils.Uint8;
 

@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
 
+import netopian.network.protocol.bmp4j.model.BmpMessage;
 import netopian.network.protocol.bmp4j.statistic.SerdesMetric;
 import netopian.network.protocol.bmp4j.transmit.Transmitter;
 import org.springframework.beans.factory.annotation.Autowired;

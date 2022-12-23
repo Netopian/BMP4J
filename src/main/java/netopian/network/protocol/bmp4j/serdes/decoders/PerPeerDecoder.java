@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 
 import com.google.protobuf.GeneratedMessageV3;
 
+import netopian.network.protocol.bmp4j.model.BmpMessage;
 import netopian.network.protocol.bmp4j.utils.Address;
 import netopian.network.protocol.bmp4j.utils.Sequential;
 import netopian.network.protocol.bmp4j.utils.Uint16;

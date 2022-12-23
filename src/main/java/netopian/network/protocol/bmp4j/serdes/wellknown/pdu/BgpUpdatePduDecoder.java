@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import com.google.protobuf.Any;
 import com.google.protobuf.GeneratedMessageV3;
 
+import netopian.network.protocol.bmp4j.model.BmpMessage;
 import netopian.network.protocol.bmp4j.serdes.concept.AttributeDecoder;
 import netopian.network.protocol.bmp4j.serdes.concept.BgpPduDecoder;
 import netopian.network.protocol.bmp4j.serdes.concept.NlriDecoder;

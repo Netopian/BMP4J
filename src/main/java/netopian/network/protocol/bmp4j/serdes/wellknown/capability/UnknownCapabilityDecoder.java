@@ -2,6 +2,7 @@ package netopian.network.protocol.bmp4j.serdes.wellknown.capability;
 
 import com.google.protobuf.ByteString;
 
+import gobgpapi.Capability;
 import netopian.network.protocol.bmp4j.serdes.concept.CapabilityDecoder;
 import netopian.network.protocol.bmp4j.utils.Sequential;
 

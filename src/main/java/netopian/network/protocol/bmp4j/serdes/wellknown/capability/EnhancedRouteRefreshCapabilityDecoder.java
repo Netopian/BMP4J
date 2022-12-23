@@ -1,5 +1,6 @@
 package netopian.network.protocol.bmp4j.serdes.wellknown.capability;
 
+import gobgpapi.Capability;
 import netopian.network.protocol.bmp4j.serdes.concept.CapabilityDecoder;
 
 import io.netty.buffer.ByteBuf;

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import netopian.network.protocol.bmp4j.model.BmpMessage;
 import netopian.network.protocol.bmp4j.utils.Sequential;
 import netopian.network.protocol.bmp4j.utils.Uint16;
 import netopian.network.protocol.bmp4j.utils.Uint32;

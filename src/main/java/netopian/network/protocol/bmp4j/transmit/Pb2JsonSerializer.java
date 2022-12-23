@@ -2,6 +2,8 @@ package netopian.network.protocol.bmp4j.transmit;
 
 import java.nio.charset.StandardCharsets;
 
+import gobgpapi.Capability;
+import netopian.network.protocol.bmp4j.model.BmpMessage;
 import org.apache.kafka.common.serialization.Serializer;
 
 import com.google.protobuf.GeneratedMessageV3;

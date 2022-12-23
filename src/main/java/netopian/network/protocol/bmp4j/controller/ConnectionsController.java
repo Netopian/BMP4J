@@ -1,5 +1,9 @@
 package netopian.network.protocol.bmp4j.controller;
 
+import netopian.network.protocol.bmp4j.integration.Connection;
+import netopian.network.protocol.bmp4j.integration.Connections;
+import netopian.network.protocol.bmp4j.integration.LifeCycle;
+import netopian.network.protocol.bmp4j.integration.OperState;
 import netopian.network.protocol.bmp4j.statistic.UpStreamMetric;
 
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.google.protobuf.Any;
 
+import netopian.network.protocol.bmp4j.model.BmpMessage;
 import netopian.network.protocol.bmp4j.serdes.concept.BgpPduDecoder;
 import netopian.network.protocol.bmp4j.serdes.concept.CapabilityDecoder;
 import netopian.network.protocol.bmp4j.utils.Address;

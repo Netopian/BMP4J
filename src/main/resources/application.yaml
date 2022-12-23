@@ -1,0 +1,57 @@
+spring:
+  profiles:
+    active: dev
+  kafka:
+    bootstrap-servers: 127.0.0.1:9092 # 指定 Kafka Broker 地址，可以设置多个，以逗号分隔
+    #    ssl:
+    #      trust-store-location: 'file:/path/to/trust/file/client.truststore.jks'
+    #      trust-store-password: 'dms@kafka'
+    #    properties:
+    #      ssl:
+    #        endpoint:
+    #          identification:
+    #            algorithm:
+    #      security:
+    #        protocol: SASL_SSL
+    #      sasl:
+    #        mechanism: PLAIN
+    #        jaas:
+    #          config: 'org.apache.kafka.common.security.plain.PlainLoginModule required username="admin" password="CloudAgent12#$";'
+    # Kafka Producer 配置项
+    producer:
+      acks: 1 # 0-不应答。1-leader 应答。all-所有 leader 和 follower 应答。
+      retries: 3 # 发送失败时，重试发送的次数
+      batch-size: 16384 # 每次批量发送消息的最大数量
+      buffer-memory: 33554432 # 每次批量发送消息的最大内存
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer # 消息的 key 的序列化
+      #value-serializer: com.huawei.network.protocol.bmp4j.transmit.Pb2BytesSerializer # 消息的 value 的pb序列化，适合模型明确的下游
+      value-serializer: com.huawei.network.protocol.bmp4j.transmit.Pb2JsonSerializer # 消息的 value 的json序列化，适合弱模型/无模型的下游
+    topics:
+      - name: test-topic-session
+        num-partitions: 3 # partition数量，默认为：3
+        replication-factor: 1 # 复制集数量，默认为：1
+        message-types: InitiationMessage, TerminationMessage
+      - name: test-topic-peer
+        num-partitions: 3 # partition数量，默认为：3
+        replication-factor: 1 # 复制集数量，默认为：1
+        message-types: RouteMonitoringMessage, RouteMirroringMessage, StatsReportsMessage, PeerUpNotification, PeerDownNotification
+bmp:
+  server:
+    listen-on: # bmp server工作的IP和端口，强制不能为空；
+      ip: 0.0.0.0
+      port: 34819
+#    seq-prefix: 1  # bmp server 分隔符，用来区分多个互相独立的bmp server。
+#    model:   # bmp server模型版本，区别于bmp4j工程版本：不同的模型版本对应的工程版本必然不同，不同的工程版本可能使用相同的模型版本。
+#      version: 1   # bmp server中模型的内核版本，不同内核版本的模型不兼容。
+#      sub-version: 1 # bmp server中模型的扩展版本，相同内核版本、不同扩展版本的模型兼容。
+logging:
+  level:
+    org:
+      springframework:
+        kafka: INFO
+      apache:
+        kafka: INFO
+  file:
+    path: /etc/bmp4j/logs
+server:
+  port: 8080

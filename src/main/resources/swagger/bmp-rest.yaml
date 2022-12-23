@@ -1,0 +1,321 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  description: |
+    This is a set of network protocol softwares which improve the efficiency of development.
+    The purpose of efficiency improvement is not more rat race, but to get off work on time.
+    Be with someone you love and/or those who love you.
+  title: bmp4j integration API
+host: localhost:8080
+schemes:
+  - http
+basePath: /bmp4j
+x-changes:
+  - x-date: '2022-4-12'
+paths:
+  /connections/activity/all:
+    get:
+      responses:
+        200:
+          description: Successful Operation
+          schema:
+            $ref: '#/definitions/connections'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/error'
+
+      parameters:
+        - required: false
+          description: The start index of paging.
+          type: integer
+          name: from
+          in: query
+        - required: false
+          description: The start index of paging.
+          type: integer
+          name: limit
+          in: query
+      tags: up-stream metric
+      operationId: get all connections
+      summary: show all active connections currently.
+      produces: application/json
+      consumes: application/json
+
+  /connections/activity/specific:
+    get:
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/connection'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/error'
+
+      parameters:
+        - required: true
+          description: the remote host of connection.
+          type: string
+          name: remote-host
+          in: path
+        - required: true
+          description: the remote port of connection.
+          type: integer
+          name: remote-port
+          in: path
+        - required: true
+          description: the local host of connection.
+          type: string
+          name: local-host
+          in: path
+        - required: true
+          description: the local port of connection.
+          type: integer
+          name: local-port
+          in: path
+      tags: up-stream metric
+      operationId: get specific connection
+      summary: show a single connection or null that specificed by remote-local peer.
+      produces: application/json
+      consumes: application/json
+
+    delete:
+      responses:
+        200:
+          description: Successful operation
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/error'
+
+      parameters:
+        - required: true
+          description: the remote host of connection.
+          type: string
+          name: remote-host
+          in: path
+        - required: true
+          description: the remote port of connection.
+          type: integer
+          name: remote-port
+          in: path
+        - required: true
+          description: the local host of connection.
+          type: string
+          name: local-host
+          in: path
+        - required: true
+          description: the local port of connection.
+          type: integer
+          name: local-ports
+          in: path
+      tags: up-stream metric
+      operationId: reboot specific connection
+      summary: reboot a connection that specificed by remote-local peer.
+      produces: application/json
+      consumes: application/json
+
+  /messages/statistic/all:
+    get:
+      responses:
+        200:
+          description: Successful Operation
+          schema:
+            $ref: '#/definitions/messages'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/error'
+
+      parameters:
+        - required: false
+          description: The start index of paging.
+          type: integer
+          name: from
+          in: query
+        - required: false
+          description: The start index of paging.
+          type: integer
+          name: limit
+          in: query
+      tags: ser-des metric
+      operationId: get all statistics
+      summary: show all message statistics currently.
+      produces: application/json
+      consumes: application/json
+
+  /messages/statistic/specific:
+    get:
+      responses:
+        200:
+          description: Successful operation
+          schema:
+            $ref: '#/definitions/message'
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/error'
+
+      parameters:
+        - required: true
+          description: the remote host of connection.
+          type: string
+          name: remote-host
+          in: path
+        - required: true
+          description: the remote port of connection.
+          type: integer
+          name: remote-port
+          in: path
+        - required: true
+          description: the local host of connection.
+          type: string
+          name: local-host
+          in: path
+        - required: true
+          description: the local port of connection.
+          type: integer
+          name: local-ports
+          in: path
+      tags: ser-des metric
+      operationId: get specific statistics
+      summary: show statistics of a single connection that specificed by remote-local peer.
+      produces: application/json
+      consumes: application/json
+
+    delete:
+      responses:
+        200:
+          description: Successful operation
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/error'
+
+      parameters:
+        - required: true
+          description: the remote host of connection.
+          type: string
+          name: remote-host
+          in: path
+        - required: true
+          description: the remote port of connection.
+          type: integer
+          name: remote-port
+          in: path
+        - required: true
+          description: the local host of connection.
+          type: string
+          name: local-host
+          in: path
+        - required: true
+          description: the local port of connection.
+          type: integer
+          name: local-ports
+          in: path
+      tags: ser-des metric
+      operationId: reset specific statistics
+      summary: reset statistics of a connection that specificed by remote-local peer.
+      produces: application/json
+      consumes: application/json
+
+definitions:
+  oper-state:
+    type: string
+    enum:
+      - ACT
+      - INACT
+
+  life-cycle:
+    description: 'living time collection'
+    properties:
+      create:
+        type: integer
+        format: int64
+        description: 'creation time of first connection received in ms'
+      last-active:
+        type: integer
+        format: int64
+        description: 'the most recent activation time in ms'
+      last-deactive:
+        type: integer
+        format: int64
+        description: 'the most recent de-activation time in ms'
+      last-duration:
+        type: integer
+        format: int64
+        description: 'the last duration of the specific connection in ms'
+
+  connection:
+    description: 'a conncection from NE to protocol server'
+    properties:
+      remote:
+        type: string
+        description: 'remote socket like: 127.0.0.1:27492'
+      local:
+        type: string
+        description: 'local socket like: 127.0.0.1:34819'
+      state:
+        $ref: '#/definitions/oper-state'
+      timer:
+        $ref: '#/definitions/life-cycle'
+
+  connections:
+    description: 'a set of connections'
+    properties:
+      entities:
+        type: array
+        items:
+          $ref: '#/definitions/connection'
+
+  statistic:
+    description: 'typical TX/RX statistic record'
+    properties:
+      identity:
+        type: string
+        description: 'messeage identity'
+      receive:
+        type: integer
+        format: int64
+        description: 'RX message count'
+      transmit:
+        type: integer
+        format: int64
+        description: 'TX message count'
+      incomplete:
+        type: integer
+        format: int64
+        description: 'unrecognized message count'
+
+  message:
+    description: 'a conncection`s serdes statistic'
+    properties:
+      remote:
+        type: string
+        description: 'remote socket like: 127.0.0.1:27492'
+      local:
+        type: string
+        description: 'local socket like: 127.0.0.1:34819'
+      statistics:
+        type: array
+        items:
+          $ref: '#/definitions/statistic'
+
+  messages:
+    description: 'a set of message'
+    properties:
+      entities:
+        type: array
+        items:
+          $ref: '#/definitions/message'
+
+  error:
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+      fields:
+        type: string

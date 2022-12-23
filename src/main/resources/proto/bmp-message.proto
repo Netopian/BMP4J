@@ -1,0 +1,186 @@
+// Licensed to the Apache Software Foundation (ASF) under one
+// or more contributor license agreements.  See the NOTICE file
+// distributed with this work for additional information
+// regarding copyright ownership.  The ASF licenses this file
+// to you under the Apache License, Version 2.0 (the
+// "License"); you may not use this file except in compliance
+// with the License.  You may obtain a copy of the License at
+//
+//   http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing,
+// software distributed under the License is distributed on an
+// "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+// KIND, either express or implied.  See the License for the
+// specific language governing permissions and limitations
+// under the License.
+
+syntax = "proto3";
+
+import "google/protobuf/any.proto";
+
+package bmp4j;
+
+option java_package = "netopian.network.protocol.bmp4j.model";
+option java_outer_classname = "BmpMessage";
+
+message Identities {
+  string remote_address = 1;
+  string message_name = 2;
+}
+
+// reference "https://tools.ietf.org/html/rfc7854#section-4.3".
+message InitiationMessage {
+  Identities id = 1;
+  repeated string information = 2;
+  string description = 3;
+  string name = 4;
+}
+
+enum Reason {
+  Reason_UNDEFINED = 0;
+  Reason_ADMINISTRATIVELY_CLOSED = 1;
+  Reason_UNSPECIFIED = 2;
+  Reason_OUT_OF_RESOURCES = 3;
+  Reason_REDUNDANT_CONNECTION = 4;
+  Reason_PERMANENTLY_CLOSED = 5;
+}
+
+// reference "https://tools.ietf.org/html/rfc7854#section-4.5".
+message TerminationMessage {
+  Identities id = 1;
+  repeated string information = 2;
+  Reason reason = 3;
+}
+
+enum PeerType {
+  PeerType_UNDEFINED = 0;
+  PeerType_GLOBAL = 1;
+  PeerType_L3VPN = 2;
+  PeerType_LOCAL = 3;
+  PeerType_LOCRIB = 4;
+}
+
+enum RibType {
+  RibType_UNDEFINED = 0;
+  RibType_PRE_IN = 1;
+  RibType_POST_IN = 2;
+  RibType_PRE_OUT = 3;
+  RibType_POST_OUT = 4;
+  RibType_PRE_FLT = 5;
+  RibType_POST_FLT = 6;
+}
+
+message PeerHeader {
+  PeerType peer_type = 1;
+  string peer_distinguisher = 2;
+  string address = 3;
+  uint32 as = 4;
+  string bgp_id = 5;
+  uint32 timestamp_sec = 6;
+  uint32 timestamp_micro = 7;
+  RibType rib_type = 8;
+  bool is_ipv4 = 9;
+}
+
+message Family {
+  uint32 afi = 1;
+  uint32 safi = 2;
+}
+
+message BgpUpdate {
+  Family family = 1;
+  // One of the following defined in "api/attribute.proto"
+  repeated google.protobuf.Any withdrawn_routes = 2;
+  repeated google.protobuf.Any pattrs = 3;
+  repeated google.protobuf.Any nlri = 4;
+}
+
+// reference "https://tools.ietf.org/html/rfc7854#section-4.6".
+message RouteMonitoringMessage {
+  Identities id = 1;
+  PeerHeader peer_header = 2;
+  google.protobuf.Any nlri = 3;
+  Family family = 4;
+  bool is_withdraw = 5;
+  repeated google.protobuf.Any pattrs = 6;
+}
+
+message BgpOpen {
+  uint32 version = 1;
+  uint32 my_as_number = 2;
+  uint32 hold_timer = 3;
+  string bgp_identifier = 4;
+  // Each capability must be one of *Capability defined in "gobgpapi/capability.proto".
+  repeated google.protobuf.Any capabilities = 5;
+}
+
+// reference "https://tools.ietf.org/html/rfc7854#section-4.7".
+message RouteMirroringMessage {
+  Identities id = 1;
+  PeerHeader peer_header = 2;
+  repeated bytes errors_meta = 3;
+}
+
+enum StatsType {
+  StatsType_UNDEFINED = 0;
+  StatsType_REJECTED_PREFIXES = 1;
+  StatsType_DUPLICATE_PREFIX_ADVERTISEMENTS = 2;
+  StatsType_DUPLICATE_WITHDRAWS = 3;
+  StatsType_INVALIDATED_CLUSTER_LIST_LOOP = 4;
+  StatsType_INVALIDATED_AS_PATH_LOOP = 5;
+  StatsType_INVALIDATED_ORIGINATOR_ID = 6;
+  StatsType_INVALIDATED_AS_CONFED_LOOP = 7;
+  StatsType_ADJ_RIBS_IN_ROUTES = 8;
+  StatsType_LOC_RIB_ROUTES = 9;
+  StatsType_PER_AFI_SAFI_ADJ_RIB_IN = 10;
+  StatsType_PER_AFI_SAFI_LOC_RIB = 11;
+  StatsType_UPDATES_TREATED_AS_WITHDRAW = 12;
+  StatsType_PREFIXES_TREATED_AS_WITHDRAW = 13;
+}
+
+message StatisticReport {
+  StatsType stats_type = 1;
+  uint64 count = 2;
+  Family optional_family = 3;
+}
+
+// reference "https://tools.ietf.org/html/rfc7854#section-4.8".
+message StatsReportsMessage {
+  Identities id = 1;
+  PeerHeader peer_header = 2;
+  repeated StatisticReport uni_statistic = 3;
+}
+
+message DataNotification {
+  uint32 error_code = 1;
+  uint32 error_subcode = 2;
+  bytes data = 3;
+}
+
+message DataFsmEventCode {
+  uint32 fsm_event_code = 1;
+}
+
+// reference "https://tools.ietf.org/html/rfc7854#section-4.9".
+message PeerDownNotification {
+  Identities id = 1;
+  PeerHeader peer_header = 2;
+  bool local_system_closed = 3;
+  oneof Data {
+    DataNotification data_notification = 4;
+    DataFsmEventCode data_fsm_event_code = 5;
+  }
+}
+
+// reference "https://tools.ietf.org/html/rfc7854#section-4.10".
+message PeerUpNotification {
+  Identities id = 1;
+  PeerHeader peer_header = 2;
+  string local_address = 3;
+  uint32 local_port = 4;
+  uint32 remote_port = 5;
+  BgpOpen open_sent = 6;
+  BgpOpen open_received = 7;
+  repeated string information = 8;
+}
